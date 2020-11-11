@@ -2,7 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const catchAsync = require('../utils/catchAsync'); // async wrapper utility
-const { campgroundSchema, reviewSchema } = require('../schemas.js');
+const { campgroundSchema } = require('../schemas.js');
 const ExpressError = require('../utils/ExpressError');
 const Campground = require('../models/campground');
 
