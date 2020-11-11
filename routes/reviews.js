@@ -36,6 +36,8 @@ router.post('/', validateReview, catchAsync(async (req, res) => {
     // Save the review and campground
     await review.save();
     await campground.save();
+    // Flash success message
+    req.flash('success', 'Created new review!');
     // Redirect to the campground's page
     res.redirect(`/campgrounds/${campground._id}`);
 }))
@@ -51,6 +53,8 @@ router.delete('/:reviewId', catchAsync(async (req, res, next) => {
     await Campground.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
     // Retrieve data for the specified review and delete it
     await Review.findByIdAndDelete(req.params.reviewId);
+    // Flash success message
+    req.flash('success', 'Successfully deleted review!');
     // Redirect to the campground's page
     res.redirect(`/campgrounds/${id}`);
 }))

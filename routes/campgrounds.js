@@ -49,6 +49,8 @@ router.post('/', validateCampground, catchAsync(async (req, res, next) => {
     // Create a new Campground model using the parsed data then save it
     const campground = new Campground(req.body.campground);
     await campground.save();
+    // Flash success message
+    req.flash('success', 'Successfully made a new campground!');
     // Redirect to the new campground's page
     res.redirect(`/campgrounds/${campground._id}`);
 }))
@@ -57,24 +59,29 @@ router.post('/', validateCampground, catchAsync(async (req, res, next) => {
 // (e.g., a page for a specific campground)
 // Execute while catching any errors, and if so, pass to next() (the basic error handler)
 router.get('/:id', catchAsync(async (req, res) => {
-    // Retrieve id parameter from the request
-    const { id } = req.params;
     // Retrieve data for the specified campground
     // Populate the reviews property (an array of Review objects)
-    const campground = await Campground.findById(id).populate('reviews');
-    console.log(campground);
+    const campground = await Campground.findById(req.params.id).populate('reviews');
+    // If the campground could not be found, flash error and redirect to campgrounds page
+    if (!campground) {
+        req.flash('error', 'Cannot find that campground!');
+        return res.redirect('/campgrounds');
+    }
     // Pass data into template and render
-    res.render('campgrounds/show', { id, campground });
+    res.render('campgrounds/show', { campground });
 }))
 
 // EDIT route - UPDATE existing data within the database
 // (e.g., a page for modifying a specific campground)
 // Execute while catching any errors, and if so, pass to next() (the basic error handler)
 router.get('/:id/edit', catchAsync(async (req, res) => {
-    // Retrieve id parameter from the request
-    const { id } = req.params;
     // Retrieve data for the specified campground
-    const campground = await Campground.findById(id);
+    const campground = await Campground.findById(req.params.id);
+    // If the campground could not be found, flash error and redirect to campgrounds page
+    if (!campground) {
+        req.flash('error', 'Cannot find that campground!');
+        return res.redirect('/campgrounds');
+    }
     // Pass data into template and render
     res.render('campgrounds/edit', { campground });
 }))
@@ -87,6 +94,8 @@ router.put('/:id', validateCampground, catchAsync(async (req, res) => {
     // MIDDLEWARE: req.body is parsed by app.use(express.urlencoded({ extended: true }))
     // Retrieve data for the specified campground and update it using the parsed data
     const campground = await Campground.findByIdAndUpdate(id, { ...req.body.campground });
+    // Flash success message
+    req.flash('success', 'Successfully updated campground!');
     // Redirect to the campground's page
     res.redirect(`/campgrounds/${campground._id}`);
 }))
@@ -98,6 +107,8 @@ router.delete('/:id', catchAsync(async (req, res) => {
     const { id } = req.params;
     // Retrieve data for the specified campground and delete it
     await Campground.findByIdAndDelete(id);
+    // Flash success message
+    req.flash('success', 'Successfully deleted campground!');
     // Redirect to the index page
     res.redirect('/campgrounds');
 }))
