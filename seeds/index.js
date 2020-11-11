@@ -3,8 +3,8 @@
 // Require modules
 const mongoose = require('mongoose');
 const cities = require('./cities'); // Sample data file #1
-const { places, descriptors } = require('./seedHelpers') // Sample data file #2
-const Campground = require('../models/campground')
+const { places, descriptors } = require('./seedHelpers'); // Sample data file #2
+const Campground = require('../models/campground');
 
 // Connect to MongoDB
 mongoose.connect('mongodb://localhost:27017/yelp-camp', {
@@ -17,7 +17,7 @@ mongoose.connect('mongodb://localhost:27017/yelp-camp', {
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error:"));
 db.once("open", () => {
-    console.log("(YelpCamp - Seed) Database connected")
+    console.log("(YelpCamp - Seed) Database connected");
 })
 
 // A function to select a random element from an array
@@ -48,7 +48,7 @@ const seedDB = async () => {
 }
 // Seed the database then close the connection
 seedDB().then(() => {
-    db.close()
-    console.log('(YelpCamp - Seed) Seed successful')
-    console.log('(YelpCamp - Seed) Disconnected from database')
+    db.close();
+    console.log('(YelpCamp - Seed) Seed successful');
+    console.log('(YelpCamp - Seed) Disconnected from database');
 })

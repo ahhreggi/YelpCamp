@@ -4,7 +4,7 @@ const path = require('path')
 const mongoose = require('mongoose');
 const ejsMate = require('ejs-mate');
 // const Joi = require('joi') // data validator, moved to schemas.js
-const { campgroundSchema, reviewSchema } = require('./schemas.js')
+const { campgroundSchema, reviewSchema } = require('./schemas.js');
 const catchAsync = require('./utils/catchAsync'); // async wrapper utility
 const ExpressError = require('./utils/ExpressError');
 const methodOverride = require('method-override');
@@ -29,14 +29,14 @@ db.once("open", () => {
 const app = express();
 
 // Set engine to parse EJS as ejsMate
-app.engine('ejs', ejsMate)
+app.engine('ejs', ejsMate);
 
 // Change the default path for the views directory to the project directory
 app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'))
+app.set('views', path.join(__dirname, 'views'));
 
 // MIDDLEWARE: Parse the body of POST requests (CREATE route)
-app.use(express.urlencoded({ extended: true }))
+app.use(express.urlencoded({ extended: true }));
 
 // MIDDLEWARE: Override convert form POST requests into PUT/DELETE
 app.use(methodOverride('_method'));
@@ -50,8 +50,8 @@ const validateCampground = (req, res, next) => {
     // Map the details into an array of its messages, then join the messages together with the delimiter ,
     // Throw an ExpressError with the message and send error code 400
     if (error) {
-        const msg = error.details.map(el => el.message).join(',')
-        throw new ExpressError(msg, 400)
+        const msg = error.details.map(el => el.message).join(',');
+        throw new ExpressError(msg, 400);
     } else {
         next();
     }
@@ -63,8 +63,8 @@ const validateReview = (req, res, next) => {
     // Map the details into an array of its messages, then join the messages together with the delimiter ,
     // Throw an ExpressError with the message and send error code 400
     if (error) {
-        const msg = error.details.map(el => el.message).join(',')
-        throw new ExpressError(msg, 400)
+        const msg = error.details.map(el => el.message).join(',');
+        throw new ExpressError(msg, 400);
     } else {
         next();
     }
@@ -72,7 +72,7 @@ const validateReview = (req, res, next) => {
 
 // Respond to a GET request for the home page
 app.get('/', (req, res) => {
-    res.render('home')
+    res.render('home');
 })
 
 // INDEX route - READ and display all data from the database
@@ -82,14 +82,14 @@ app.get('/campgrounds', catchAsync(async (req, res) => {
     // Retrieve data for all campgrounds
     const campgrounds = await Campground.find({});
     // Pass data into template and render
-    res.render('campgrounds/index', { campgrounds })
+    res.render('campgrounds/index', { campgrounds });
 }))
 
 // NEW/CREATE route - CREATE new data and insert it into the database
 // (e.g., a page with a form that submits new data)
 // NOTE: Order matters! This must precede the show route due to the url request
 app.get('/campgrounds/new', (req, res) => {
-    res.render('campgrounds/new')
+    res.render('campgrounds/new');
 })
 // Execute while validating data and catching any errors, and if so, pass to next() (the basic error handler)
 app.post('/campgrounds', validateCampground, catchAsync(async (req, res, next) => {
@@ -103,7 +103,7 @@ app.post('/campgrounds', validateCampground, catchAsync(async (req, res, next) =
     const campground = new Campground(req.body.campground);
     await campground.save();
     // Redirect to the new campground's page
-    res.redirect(`/campgrounds/${campground._id}`)
+    res.redirect(`/campgrounds/${campground._id}`);
 }))
 
 // SHOW route - READ and display specific data from the database
@@ -115,9 +115,9 @@ app.get('/campgrounds/:id', catchAsync(async (req, res) => {
     // Retrieve data for the specified campground
     // Populate the reviews property (an array of Review objects)
     const campground = await Campground.findById(id).populate('reviews');
-    console.log(campground)
+    console.log(campground);
     // Pass data into template and render
-    res.render('campgrounds/show', { id, campground })
+    res.render('campgrounds/show', { id, campground });
 }))
 
 // EDIT route - UPDATE existing data within the database
@@ -129,7 +129,7 @@ app.get('/campgrounds/:id/edit', catchAsync(async (req, res) => {
     // Retrieve data for the specified campground
     const campground = await Campground.findById(id);
     // Pass data into template and render
-    res.render('campgrounds/edit', { campground })
+    res.render('campgrounds/edit', { campground });
 }))
 // MIDDLEWARE: the edit form POST request is converted into PUT by app.use(methodOverride('_method'));
 // Execute while validating data and catching any errors, and if so, pass to next() (the basic error handler)
@@ -140,7 +140,7 @@ app.put('/campgrounds/:id', validateCampground, catchAsync(async (req, res) => {
     // Retrieve data for the specified campground and update it using the parsed data
     const campground = await Campground.findByIdAndUpdate(id, { ...req.body.campground });
     // Redirect to the campground's page
-    res.redirect(`/campgrounds/${campground._id}`)
+    res.redirect(`/campgrounds/${campground._id}`);
 }))
 
 // DELETE route - DESTROY existing data within the database
@@ -168,7 +168,7 @@ app.post('/campgrounds/:id/reviews', validateReview, catchAsync(async (req, res)
     await review.save();
     await campground.save();
     // Redirect to the campground's page
-    res.redirect(`/campgrounds/${campground._id}`)
+    res.redirect(`/campgrounds/${campground._id}`);
 }))
 
 // DELETE route - DESTROY existing data within the database
@@ -183,12 +183,12 @@ app.delete('/campgrounds/:id/reviews/:reviewId', catchAsync(async (req, res, nex
     // Retrieve data for the specified review and delete it
     await Review.findByIdAndDelete(req.params.reviewId);
     // Redirect to the campground's page
-    res.redirect(`/campgrounds/${id}`)
+    res.redirect(`/campgrounds/${id}`);
 }))
 
 // Run if no other preceding requests are matched first (404: Not Found)
 app.all('*', (req, res, next) => {
-    next(new ExpressError('Page Not Found', 404))
+    next(new ExpressError('Page Not Found', 404));
 })
 
 // Default error handler, receives an error, if any, from a previous function
@@ -196,9 +196,9 @@ app.use((err, req, res, next) => {
     // Deconstruct statusCode from previous function, with default set to 500
     const { statusCode = 500 } = err;
     // Set a default error message if none provided
-    if (!err.message) err.message = 'Oh no, something went wrong!'
+    if (!err.message) err.message = 'Oh no, something went wrong!';
     // Send status code and render error.ejs page
-    res.status(statusCode).render('error', { err })
+    res.status(statusCode).render('error', { err });
 })
 
 // // Test the app's connection to the database (entry should be visible on MongoDB)
@@ -210,5 +210,5 @@ app.use((err, req, res, next) => {
 
 // Listen for connections on the specified port
 app.listen(3000, () => {
-    console.log('(YelpCamp) Listening to port 3000...')
+    console.log('(YelpCamp) Listening to port 3000...');
 })
