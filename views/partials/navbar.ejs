@@ -11,6 +11,17 @@
                 <a class="nav-link" href="/campgrounds">Campgrounds</a>
                 <a class="nav-link" href="/campgrounds/new">New Campground</a>
             </div>
+            <!-- Add authentication links to right end of navbar -->
+            <div class="navbar-nav ml-auto">
+                <!-- Show Login + Register if the user is not logged in -->
+                <% if (!currentUser) { %>
+                <a class="nav-link" href="/login">Login</a>
+                <a class="nav-link" href="/register">Register</a>
+                <!-- Show Logout if the user is logged in -->
+                <% } else { %>
+                <a class="nav-link" href="/logout">Logout</a>
+                <% } %>
+            </div>
         </div>
     </div>
 </nav>

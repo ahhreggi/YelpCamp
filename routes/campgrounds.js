@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 const catchAsync = require('../utils/catchAsync'); // async wrapper utility
 const { campgroundSchema } = require('../schemas.js');
+const { isLoggedIn } = require('../middleware');
 const ExpressError = require('../utils/ExpressError');
 const Campground = require('../models/campground');
 
@@ -35,11 +36,13 @@ router.get('/', catchAsync(async (req, res) => {
 // NEW/CREATE route - CREATE new data and insert it into the database
 // (e.g., a page with a form that submits new data)
 // NOTE: Order matters! This must precede the show route due to the url request
-router.get('/new', (req, res) => {
+// Require that the user is logged in
+router.get('/new', isLoggedIn, (req, res) => {
     res.render('campgrounds/new');
 })
+// Require that the user is logged in (ideally, the user should never even make it to this form, but it's best to protect it anyways)
 // Execute while validating data and catching any errors, and if so, pass to next() (the basic error handler)
-router.post('/', validateCampground, catchAsync(async (req, res, next) => {
+router.post('/', isLoggedIn, validateCampground, catchAsync(async (req, res, next) => {
     // Retrieve data submitted by the form (POST request)
     // MIDDLEWARE: req.body is parsed by app.use(express.urlencoded({ extended: true }))
 
@@ -73,8 +76,9 @@ router.get('/:id', catchAsync(async (req, res) => {
 
 // EDIT route - UPDATE existing data within the database
 // (e.g., a page for modifying a specific campground)
+// Require that the user is logged in
 // Execute while catching any errors, and if so, pass to next() (the basic error handler)
-router.get('/:id/edit', catchAsync(async (req, res) => {
+router.get('/:id/edit', isLoggedIn, catchAsync(async (req, res) => {
     // Retrieve data for the specified campground
     const campground = await Campground.findById(req.params.id);
     // If the campground could not be found, flash error and redirect to campgrounds page
@@ -87,8 +91,9 @@ router.get('/:id/edit', catchAsync(async (req, res) => {
 }))
 
 // MIDDLEWARE: the edit form POST request is converted into PUT by app.use(methodOverride('_method'));
+// Require that the user is logged in
 // Execute while validating data and catching any errors, and if so, pass to next() (the basic error handler)
-router.put('/:id', validateCampground, catchAsync(async (req, res) => {
+router.put('/:id', isLoggedIn, validateCampground, catchAsync(async (req, res) => {
     // Retrieve id parameter from the request
     const { id } = req.params;
     // MIDDLEWARE: req.body is parsed by app.use(express.urlencoded({ extended: true }))
@@ -102,7 +107,8 @@ router.put('/:id', validateCampground, catchAsync(async (req, res) => {
 
 // DELETE route - DESTROY existing data within the database
 // (e.g., a button on a campground page to delete it)
-router.delete('/:id', catchAsync(async (req, res) => {
+// Require that the user is logged in
+router.delete('/:id', isLoggedIn, catchAsync(async (req, res) => {
     // Retrieve id parameter from the request
     const { id } = req.params;
     // Retrieve data for the specified campground and delete it

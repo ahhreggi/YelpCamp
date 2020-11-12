@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const Review = require('./review');
 const Schema = mongoose.Schema;
 
-// Construct the basic schema model
+// Construct the basic schema model for a campground
 // reviews is an array of Review model objects
 const CampgroundSchema = new Schema({
     title: String,

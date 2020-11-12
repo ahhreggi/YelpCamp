@@ -46,8 +46,18 @@ This project was created as part of the <a href="https://www.udemy.com/course/th
 
 <!-- FEATURES -->
 ## ⭐ Features
-* Coming soon!
+* Add, edit, and remove campgrounds and reviews
+* User authentication
 
 <!-- INSTALLATION -->
 ## 🛠 Installation
-* Coming soon!
+1. Install <a href="https://www.mongodb.com/">MongoDB</a>
+2. In the project directory, install dependencies
+   ```
+   npm install
+   ```
+3. Launch the application server
+   ```
+   node app.js
+   ```
+4. Go to <a href="http://localhost:3000/">http://localhost:3000/</a>
