@@ -5,7 +5,11 @@ const Schema = mongoose.Schema;
 // Construct the basic schema model for a review
 const reviewSchema = new Schema({
     body: String,
-    rating: Number
+    rating: Number,
+    author: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    }
 })
 
 // Compile and export the model

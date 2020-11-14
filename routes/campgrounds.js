@@ -2,26 +2,8 @@
 const express = require('express');
 const router = express.Router();
 const catchAsync = require('../utils/catchAsync'); // async wrapper utility
-const { campgroundSchema } = require('../schemas.js');
-const { isLoggedIn } = require('../middleware');
-const ExpressError = require('../utils/ExpressError');
+const { isLoggedIn, isAuthor, validateCampground } = require('../middleware');
 const Campground = require('../models/campground');
-
-// MIDDLEWARE: JOI Validation
-// Server-side data validation functions are defined in schemas.js
-const validateCampground = (req, res, next) => {
-    // Validate the body (JOI) and grab the error if there is one
-    const { error } = campgroundSchema.validate(req.body);
-    // If there is an error, grab the details (array of objects)
-    // Map the details into an array of its messages, then join the messages together with the delimiter ,
-    // Throw an ExpressError with the message and send error code 400
-    if (error) {
-        const msg = error.details.map(el => el.message).join(',');
-        throw new ExpressError(msg, 400);
-    } else {
-        next();
-    }
-}
 
 // INDEX route - READ and display all data from the database
 // (e.g., a page to display all campgrounds)
@@ -51,6 +33,8 @@ router.post('/', isLoggedIn, validateCampground, catchAsync(async (req, res, nex
 
     // Create a new Campground model using the parsed data then save it
     const campground = new Campground(req.body.campground);
+    // Save the campground author as the currently logged in user
+    campground.author = req.user._id;
     await campground.save();
     // Flash success message
     req.flash('success', 'Successfully made a new campground!');
@@ -64,7 +48,14 @@ router.post('/', isLoggedIn, validateCampground, catchAsync(async (req, res, nex
 router.get('/:id', catchAsync(async (req, res) => {
     // Retrieve data for the specified campground
     // Populate the reviews property (an array of Review objects)
-    const campground = await Campground.findById(req.params.id).populate('reviews');
+    // Populate the author property of each review
+    const campground = await Campground.findById(req.params.id).populate({
+        path: 'reviews',
+        populate: {
+            path: 'author'
+        }
+    }).populate('author');
+    console.log(campground);
     // If the campground could not be found, flash error and redirect to campgrounds page
     if (!campground) {
         req.flash('error', 'Cannot find that campground!');
@@ -77,10 +68,13 @@ router.get('/:id', catchAsync(async (req, res) => {
 // EDIT route - UPDATE existing data within the database
 // (e.g., a page for modifying a specific campground)
 // Require that the user is logged in
+// Check that the user is the author
 // Execute while catching any errors, and if so, pass to next() (the basic error handler)
-router.get('/:id/edit', isLoggedIn, catchAsync(async (req, res) => {
+router.get('/:id/edit', isLoggedIn, isAuthor, catchAsync(async (req, res) => {
+    // Retrieve id parameter from the request
+    const { id } = req.params;
     // Retrieve data for the specified campground
-    const campground = await Campground.findById(req.params.id);
+    const campground = await Campground.findById(id);
     // If the campground could not be found, flash error and redirect to campgrounds page
     if (!campground) {
         req.flash('error', 'Cannot find that campground!');
@@ -92,8 +86,9 @@ router.get('/:id/edit', isLoggedIn, catchAsync(async (req, res) => {
 
 // MIDDLEWARE: the edit form POST request is converted into PUT by app.use(methodOverride('_method'));
 // Require that the user is logged in
+// Check that the user is the author
 // Execute while validating data and catching any errors, and if so, pass to next() (the basic error handler)
-router.put('/:id', isLoggedIn, validateCampground, catchAsync(async (req, res) => {
+router.put('/:id', isLoggedIn, isAuthor, validateCampground, catchAsync(async (req, res) => {
     // Retrieve id parameter from the request
     const { id } = req.params;
     // MIDDLEWARE: req.body is parsed by app.use(express.urlencoded({ extended: true }))
@@ -108,7 +103,8 @@ router.put('/:id', isLoggedIn, validateCampground, catchAsync(async (req, res) =
 // DELETE route - DESTROY existing data within the database
 // (e.g., a button on a campground page to delete it)
 // Require that the user is logged in
-router.delete('/:id', isLoggedIn, catchAsync(async (req, res) => {
+// Check that the user is the author
+router.delete('/:id', isLoggedIn, isAuthor, catchAsync(async (req, res) => {
     // Retrieve id parameter from the request
     const { id } = req.params;
     // Retrieve data for the specified campground and delete it
