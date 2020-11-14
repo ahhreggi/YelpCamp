@@ -47,7 +47,7 @@ This project was created as part of the <a href="https://www.udemy.com/course/th
 <!-- FEATURES -->
 ## ⭐ Features
 * Add, edit, and remove campgrounds and reviews
-* User authentication
+* User authentication and action authorization
 
 <!-- INSTALLATION -->
 ## 🛠 Installation
