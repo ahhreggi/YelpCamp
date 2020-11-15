@@ -24,7 +24,7 @@
 
 <!-- SCREENSHOT -->
 <div align="center">
-  <img src="https://i.imgur.com/urQujsV.png">
+  <img src="https://i.imgur.com/W1b02VW.png">
 </div>
 
 <!-- INTRODUCTION -->
