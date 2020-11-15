@@ -41,6 +41,10 @@ const seedDB = async () => {
             title: `${sample(descriptors)} ${sample(places)}`,
             description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
             price, // automatically defaults to { price: price }
+            geometry: {
+                type: "Point",
+                coordinates: [-113.1331, 47.0202]
+            },
             images: [
                 {
                     url: 'https://res.cloudinary.com/ahhreggi/image/upload/v1605414440/YelpCamp/wu9zogxzo6s5j96hazgj.jpg',
@@ -51,7 +55,7 @@ const seedDB = async () => {
                     filename: 'YelpCamp/tqe2m22iyrzqonngxxqm'
                 }
             ]
-        })
+        });
         // Save the changes
         await camp.save();
     }

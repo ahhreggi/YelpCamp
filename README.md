@@ -49,6 +49,7 @@ This project was created as part of the <a href="https://www.udemy.com/course/th
 * Add, edit, and remove campgrounds and reviews
 * User authentication and action authorization
 * Upload campground image previews
+* Campground geolocation
 
 <!-- INSTALLATION -->
 ## 🛠 Installation

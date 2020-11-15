@@ -11,7 +11,12 @@
     <div class="row">
         <!-- after size medium and above, occupy 4 units -->
         <div class="col-md-4">
-            <img src="<%= campground.images[0].url %> " alt="" class="img-fluid">
+            <% if (campground.images.length) { %>
+            <img src="<%= campground.images[0].url %>" alt="" class="img-fluid">
+            <% } else { %>
+            <img src="https://res.cloudinary.com/ahhreggi/image/upload/v1605419430/YelpCamp/alls8yet75svdsrp8avz.jpg"
+                alt="" class="img-fluid">
+            <% } %>
         </div>
         <div class="col-md-8">
             <div class="card-body">
