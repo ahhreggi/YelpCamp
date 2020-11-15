@@ -80,7 +80,6 @@ passport.deserializeUser(User.deserializeUser());
 
 // MIDDLEWARE: On every request, define local variables (ejs)
 app.use((req, res, next) => {
-    console.log(req.session);
     res.locals.currentUser = req.user; // info about the current user (User object if logged in, otherwise undefined), handled by Passport
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error');
