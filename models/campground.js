@@ -10,9 +10,13 @@ const ImageSchema = new Schema({
 
 });
 
+// Create a virtual thumbnail property
 ImageSchema.virtual('thumbnail').get(function () {
     return this.url.replace('/upload', '/upload/w_200');
 });
+
+// Include virtuals when converting documents into JSON
+const opts = { toJSON: { virtuals: true } };
 
 // Construct the basic schema model for a campground
 // reviews is an array of Review model objects
@@ -43,7 +47,14 @@ const CampgroundSchema = new Schema({
             ref: 'Review'
         }
     ]
-})
+}, opts)
+
+// Create a virtual popUpMarkup property
+CampgroundSchema.virtual('properties.popUpMarkup').get(function () {
+    return `
+    <strong><a href="/campgrounds/${this._id}">${this.title}</a></strong>
+    <p>${this.description.substring(0, 20)}...</p>`
+});
 
 // When a Campground is deleted, findByIdAndDelete() is executed (app.js)
 // findByIdAndDelete() uses the findOneAndDelete() middleware
