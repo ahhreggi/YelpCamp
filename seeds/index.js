@@ -39,9 +39,18 @@ const seedDB = async () => {
             author: '5facde5049a505023528341e', // Set to ObjectID of user = ahhreggi
             location: `${cities[random1000].city}, ${cities[random1000].state}`,
             title: `${sample(descriptors)} ${sample(places)}`,
-            image: 'https://source.unsplash.com/collection/483251',
             description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-            price // automatically defaults to { price: price }
+            price, // automatically defaults to { price: price }
+            images: [
+                {
+                    url: 'https://res.cloudinary.com/ahhreggi/image/upload/v1605414440/YelpCamp/wu9zogxzo6s5j96hazgj.jpg',
+                    filename: 'YelpCamp/wu9zogxzo6s5j96hazgj'
+                },
+                {
+                    url: 'https://res.cloudinary.com/ahhreggi/image/upload/v1605414441/YelpCamp/tqe2m22iyrzqonngxxqm.jpg',
+                    filename: 'YelpCamp/tqe2m22iyrzqonngxxqm'
+                }
+            ]
         })
         // Save the changes
         await camp.save();

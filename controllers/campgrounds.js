@@ -1,4 +1,5 @@
 const Campground = require('../models/campground');
+const { cloudinary } = require('../cloudinary');
 
 module.exports.index = async (req, res) => {
     // Retrieve data for all campgrounds
@@ -20,9 +21,12 @@ module.exports.createCampground = async (req, res, next) => {
 
     // Create a new Campground model using the parsed data then save it
     const campground = new Campground(req.body.campground);
+    // Save the campground images array as the array of files that had been added to req.body by multer
+    campground.images = req.files.map(f => ({ url: f.path, filename: f.filename }));
     // Save the campground author as the currently logged in user
     campground.author = req.user._id;
     await campground.save();
+    console.log(campground);
     // Flash success message
     req.flash('success', 'Successfully made a new campground!');
     // Redirect to the new campground's page
@@ -65,9 +69,23 @@ module.exports.renderEditForm = async (req, res) => {
 module.exports.updateCampground = async (req, res) => {
     // Retrieve id parameter from the request
     const { id } = req.params;
+    console.log(req.body);
     // MIDDLEWARE: req.body is parsed by app.use(express.urlencoded({ extended: true }))
     // Retrieve data for the specified campground and update it using the parsed data
     const campground = await Campground.findByIdAndUpdate(id, { ...req.body.campground });
+    // Add to the campground images array, the array of files that had been added to req.body by multer
+    const imgs = req.files.map(f => ({ url: f.path, filename: f.filename }));
+    campground.images.push(...imgs);
+    await campground.save();
+    // If there are images to delete, pull from the images array, all filenames that are in the deleteImages array
+    console.log('deleteImages: ', req.body.deleteImages);
+    if (req.body.deleteImages) {
+        for (let filename of req.body.deleteImages) {
+            // Delete the image from cloudinary
+            await cloudinary.uploader.destroy(filename);
+        }
+        await campground.updateOne({ $pull: { images: { filename: { $in: req.body.deleteImages } } } });
+    }
     // Flash success message
     req.flash('success', 'Successfully updated campground!');
     // Redirect to the campground's page

@@ -5,7 +5,7 @@
     <!-- 6 units but we want it in the middle, so offset by 3 -->
     <div class="col-6 offset-3">
         <!-- novalidate prevents the browser from validating that required sections are filled out so that Bootstrap can take over using .validated-form -->
-        <form action="/campgrounds" method="post" novalidate class="validated-form">
+        <form action="/campgrounds" method="post" novalidate class="validated-form" enctype="multipart/form-data">
             <!-- Campground TITLE -->
             <div class="mb-3">
                 <label class="form-label" for="title">Title</label>
@@ -18,14 +18,6 @@
             <div class="mb-3">
                 <label class="form-label" for="location">Location</label>
                 <input class="form-control" type=" text" id="location" name="campground[location]" required>
-                <div class="valid-feedback">
-                    Looks good!
-                </div>
-            </div>
-            <!-- Campground IMG URL-->
-            <div class="mb-3">
-                <label class="form-label" for="image">Image URL</label>
-                <input class="form-control" type=" text" id="image" name="campground[image]" required>
                 <div class="valid-feedback">
                     Looks good!
                 </div>
@@ -43,7 +35,6 @@
                         Looks good!
                     </div>
                 </div>
-
             </div>
             <!-- Campground DESCRIPTION -->
             <div class=" mb-3">
@@ -54,6 +45,17 @@
                     Looks good!
                 </div>
             </div>
+            <!-- Campground IMAGES -->
+            <div class="mb-3">
+                <div class="form-file custom-file">
+                    <input type="file" class="form-file-input" id="image" name="image" multiple>
+                    <label for="image" class="form-file-label">
+                        <span class="form-file-text custom-file-label">Choose images...</span>
+                        <span class="form-file-button">Browse</span>
+                    </label>
+                </div>
+            </div>
+            <!-- Submit Button -->
             <div class="mb-3">
                 <button class="btn btn-success">Add Campground</button>
             </div>

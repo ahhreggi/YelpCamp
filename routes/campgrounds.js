@@ -4,6 +4,9 @@ const router = express.Router();
 const campgrounds = require('../controllers/campgrounds');
 const catchAsync = require('../utils/catchAsync'); // async wrapper utility
 const { isLoggedIn, isAuthor, validateCampground } = require('../middleware');
+const multer = require('multer');
+const { storage } = require('../cloudinary');
+const upload = multer({ storage });
 
 router.route('/')
     // INDEX route - READ and display all data from the database
@@ -14,7 +17,7 @@ router.route('/')
     // (e.g., a page with a form that submits new data)
     // Require that the user is logged in (ideally, the user should never even make it to this form, but it's best to protect it anyways)
     // Execute while validating data and catching any errors, and if so, pass to next() (the basic error handler)
-    .post(isLoggedIn, validateCampground, catchAsync(campgrounds.createCampground))
+    .post(isLoggedIn, upload.array('image'), validateCampground, catchAsync(campgrounds.createCampground))
 
 // NEW/CREATE route - CREATE new data and insert it into the database
 // (e.g., a page with a form that submits new data)
@@ -31,7 +34,7 @@ router.route('/:id')
     // Require that the user is logged in
     // Check that the user is the author
     // Execute while validating data and catching any errors, and if so, pass to next() (the basic error handler)
-    .put(isLoggedIn, isAuthor, validateCampground, catchAsync(campgrounds.updateCampground))
+    .put(isLoggedIn, isAuthor, upload.array('image'), validateCampground, catchAsync(campgrounds.updateCampground))
     // DELETE route - DESTROY existing data within the database
     // (e.g., a button on a campground page to delete it)
     // Require that the user is logged in
