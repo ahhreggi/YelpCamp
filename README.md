@@ -24,7 +24,7 @@
 
 <!-- SCREENSHOT -->
 <div align="center">
-  <img src="https://i.imgur.com/FcWOx7V.png">
+  <img src="https://i.imgur.com/W1b02VW.png">
 </div>
 
 <!-- INTRODUCTION -->
@@ -42,7 +42,7 @@ This project was created as part of the <a href="https://www.udemy.com/course/th
   <a href="http://www.passportjs.org/">Passport.js</a>
 </b>
 
-<b>Other:</b> mongoose, ejs-mate, express-session, connect-flash, method-override, momentjs
+<b>Other:</b> mongoose, ejs-mate, express-session, connect-flash, method-override, momentjs, multer, Cloudinary, mapbox
 
 <!-- FEATURES -->
 ## ⭐ Features

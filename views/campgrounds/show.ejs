@@ -3,9 +3,6 @@
 
 <div class="row">
     <div class="col-6">
-
-        <div id='map' style='width: 400px; height: 300px;'></div>
-
         <!-- Image Carousel -->
         <div id="campgroundCarousel" class="carousel slide" data-ride="carousel">
             <div class="carousel-inner">
@@ -52,6 +49,8 @@
         </div>
     </div>
     <div class="col-6">
+        <!-- Map -->
+        <div class="mb-3" id='map' style='width: auto; height: 300px;'></div>
         <!-- Show review form only if the user is logged in -->
         <% if (currentUser) { %>
         <h2>Leave a Review</h2>
