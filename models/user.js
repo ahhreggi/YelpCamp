@@ -1,8 +1,9 @@
+// Require models
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const passportLocalMongoose = require('passport-local-mongoose');
 
-// Construct the basic schema model for a user
+// Construct User model
 const UserSchema = new Schema({
     email: {
         type: String,
@@ -10,8 +11,9 @@ const UserSchema = new Schema({
         unique: true
     }
 })
-// Add a field for username + password to UserSchema
-// Passport ensures that usernames are unique and provides additional methods
+
+// Add a field for username + password to UserSchema via Passport.js
+// Automatically ensures usernames are unique and provides additional methods
 UserSchema.plugin(passportLocalMongoose);
 
 // Compile and export the model

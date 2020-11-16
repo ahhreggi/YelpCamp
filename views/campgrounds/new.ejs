@@ -2,11 +2,10 @@
 
 <div class="row">
     <h1 class="text-center">New Campground</h1>
-    <!-- 6 units but we want it in the middle, so offset by 3 -->
     <div class="col-md-6 offset-md-3">
-        <!-- novalidate prevents the browser from validating that required sections are filled out so that Bootstrap can take over using .validated-form -->
+        <!-- novalidate nullifies "required" property to allow Bootstrap to handle .validated-form elements -->
         <form action="/campgrounds" method="post" novalidate class="validated-form" enctype="multipart/form-data">
-            <!-- Campground TITLE -->
+            <!-- Campground title -->
             <div class="mb-3">
                 <label class="form-label" for="title">Title</label>
                 <input class="form-control" type="text" id="title" name="campground[title]" required>
@@ -14,7 +13,7 @@
                     Looks good!
                 </div>
             </div>
-            <!-- Campground LOCATION -->
+            <!-- Campground location -->
             <div class="mb-3">
                 <label class="form-label" for="location">Location</label>
                 <input class="form-control" type=" text" id="location" name="campground[location]" required>
@@ -22,7 +21,7 @@
                     Looks good!
                 </div>
             </div>
-            <!-- Campground PRICE -->
+            <!-- Campground price -->
             <div class="mb-3">
                 <label for="price" class="form-label">Campground Price</label>
                 <div class="input-group">
@@ -36,7 +35,7 @@
                     </div>
                 </div>
             </div>
-            <!-- Campground DESCRIPTION -->
+            <!-- Campground description -->
             <div class=" mb-3">
                 <label class="form-label" for="description">Description</label>
                 <textarea class="form-control" type=" text" id="description" name="campground[description]"
@@ -45,7 +44,7 @@
                     Looks good!
                 </div>
             </div>
-            <!-- Campground IMAGES -->
+            <!-- Campground images -->
             <div class="mb-3">
                 <div class="form-file custom-file">
                     <input type="file" class="form-file-input" id="image" name="image" multiple>
@@ -55,7 +54,7 @@
                     </label>
                 </div>
             </div>
-            <!-- Submit Button -->
+            <!-- Submit button -->
             <div class="mb-3">
                 <button class="btn btn-success">Add Campground</button>
             </div>

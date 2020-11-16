@@ -2,7 +2,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-// Construct the basic schema model for a review
+// Construct Review model
 const reviewSchema = new Schema({
     body: String,
     rating: Number,

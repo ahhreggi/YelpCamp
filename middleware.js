@@ -6,7 +6,7 @@ const Review = require('./models/review');
 
 // If the user is not logged in, redirect to the login page
 module.exports.isLoggedIn = (req, res, next) => {
-    if (!req.isAuthenticated()) { // .isAuthenticated() method is added by Passport
+    if (!req.isAuthenticated()) { // added by Passport.js
         // Store the URL that the user came from before being prompted to log in
         req.session.returnTo = req.originalUrl;
         req.flash('error', 'You must be logged in to do that.');
@@ -15,14 +15,13 @@ module.exports.isLoggedIn = (req, res, next) => {
     next();
 }
 
-// MIDDLEWARE: JOI Validation
-// Server-side data validation functions are defined in schemas.js
+// Validate user-submitted data for a new campground
 module.exports.validateCampground = (req, res, next) => {
-    // Validate the body (JOI) and grab the error if there is one
+    // Validate submitted campground data
     const { error } = campgroundSchema.validate(req.body);
-    // If there is an error, grab the details (array of objects)
-    // Map the details into an array of its messages, then join the messages together with the delimiter ,
-    // Throw an ExpressError with the message and send error code 400
+    // If there is an error, grab the details (array of objects),
+    // map them into an array of its messages, join the messages,
+    // then throw an ExpressError with the message and error code 400
     if (error) {
         const msg = error.details.map(el => el.message).join(',');
         throw new ExpressError(msg, 400);
@@ -31,12 +30,10 @@ module.exports.validateCampground = (req, res, next) => {
     }
 }
 
-// MIDDLEWARE: Verify author to check if the user has permission to modify the campground
+// Verify that the user is authorized to modify the campground
 module.exports.isAuthor = async (req, res, next) => {
-    // Retrieve id parameter from the request
-    const { id } = req.params;
     // Retrieve data for the specified campground
-    const campground = await Campground.findById(id);
+    const campground = await Campground.findById(req.params.id);
     // If the user does not own the campground, flash error and redirect
     if (!campground.author.equals(req.user._id)) {
         req.flash('error', 'You do not have permission to do that!');
@@ -45,11 +42,9 @@ module.exports.isAuthor = async (req, res, next) => {
     next();
 }
 
-// MIDDLEWARE: Verify author to check if the user has permission to modify the review
+// Verify that the user is authorized to modify the review
 module.exports.isReviewAuthor = async (req, res, next) => {
-    // id = author of campground
-    // reviewId = author of individual review
-    // Retrieve id, reviewId parameters from the request
+    // Deconstruct parameters
     const { id, reviewId } = req.params;
     // Retrieve data for the specified review
     const review = await Review.findById(reviewId);
@@ -61,14 +56,13 @@ module.exports.isReviewAuthor = async (req, res, next) => {
     next();
 }
 
-// MIDDLEWARE: JOI Validation
-// Server-side data validation functions are defined in schemas.js
+// Validate user-submitted data for a new review
 module.exports.validateReview = (req, res, next) => {
-    // Validate the body (JOI) and grab the error if there is one
+    // Validate submitted review data
     const { error } = reviewSchema.validate(req.body);
-    // If there is an error, grab the details (array of objects)
-    // Map the details into an array of its messages, then join the messages together with the delimiter ,
-    // Throw an ExpressError with the message and send error code 400
+    // If there is an error, grab the details (array of objects),
+    // map them into an array of its messages, join the messages,
+    // then throw an ExpressError with the message and error code 400
     if (error) {
         const msg = error.details.map(el => el.message).join(',');
         throw new ExpressError(msg, 400);

@@ -2,13 +2,12 @@
 
 <div class="row">
     <h1 class="text-center">Edit Campground</h1>
-    <!-- 6 units but we want it in the middle, so offset by 3 -->
     <div class="col-md-6 offset-md-3">
         <!-- Override POST request with PUT using method-override -->
         <form action="/campgrounds/<%= campground._id %>?_method=PUT" method="post" novalidate class="validated-form"
             enctype="multipart/form-data">
+            <!-- Campground title -->
             <!-- Populate the form with the campground's existing data -->
-            <!-- Campground TITLE -->
             <div class="mb-3">
                 <label class="form-label" for="title">Title</label>
                 <input class="form-control" type="text" id="title" name="campground[title]"
@@ -17,7 +16,7 @@
                     Looks good!
                 </div>
             </div>
-            <!-- Campground LOCATION -->
+            <!-- Campground location -->
             <div class="mb-3">
                 <label class="form-label" for="location">Location</label>
                 <input class="form-control" type=" text" id="location" name="campground[location]"
@@ -26,7 +25,7 @@
                     Looks good!
                 </div>
             </div>
-            <!-- Campground PRICE -->
+            <!-- Campground price -->
             <div class="mb-3">
                 <label for="price" class="form-label">Campground Price</label>
                 <div class="input-group">
@@ -41,7 +40,7 @@
                     </div>
                 </div>
             </div>
-            <!-- Campground DESCRIPTION -->
+            <!-- Campground description -->
             <div class=" mb-3">
                 <label class="form-label" for="description">Description</label>
                 <textarea class="form-control" type=" text" id="description" name="campground[description]"
@@ -50,7 +49,7 @@
                     Looks good!
                 </div>
             </div>
-            <!-- Campground IMAGES -->
+            <!-- Campground images -->
             <div class="mb-3">
                 <div class="form-file custom-file">
                     <input type="file" class="form-file-input" id="image" name="image" multiple>
@@ -60,6 +59,7 @@
                     </label>
                 </div>
             </div>
+            <!-- Campground existing image thumbnails -->
             <div class="mb-3">
                 <% campground.images.forEach(function(img, i) { %>
                 <img src="<%= img.thumbnail %>" class="img-thumbnail" alt="">
@@ -69,7 +69,7 @@
                 <label for="image-<%= i %>">Delete?</label>
                 <% }) %>
             </div>
-            <!-- Submit Button -->
+            <!-- Submit button -->
             <div class=" mb-3">
                 <button class="btn btn-info">Update Campground</button>
             </div>

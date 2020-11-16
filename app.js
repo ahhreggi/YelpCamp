@@ -17,13 +17,12 @@ const LocalStrategy = require('passport-local');
 const User = require('./models/user');
 const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
+const MongoDBStore = require("connect-mongo")(session);
 
 // Routes
 const userRoutes = require('./routes/users');
 const campgroundRoutes = require('./routes/campgrounds');
 const reviewRoutes = require('./routes/reviews');
-
-const MongoDBStore = require("connect-mongo")(session);
 
 // Connect to MongoDB
 const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/yelp-camp';
@@ -34,17 +33,17 @@ mongoose.connect(dbUrl, {
     useFindAndModify: false
 })
 
-// Check for database connection errors
+// Check for database connection
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error:"));
 db.once("open", () => {
-    console.log("(YelpCamp) Database connected")
+    console.log(`(YelpCamp) Database connected: ${db.host}`)
 })
 
 // Create an Express application
 const app = express();
 
-// Set engine to parse EJS as ejsMate
+// Set ejsMate as EJS parser
 app.engine('ejs', ejsMate);
 
 // Change the default path for the views directory to the project directory
@@ -63,19 +62,18 @@ app.use(express.static(path.join(__dirname, 'public')));
 // MIDDLEWARE: Sanitize Mongo queries
 app.use(mongoSanitize());
 
+// Initialize MongoDB session store
 const secret = process.env.SECRET || 'badsecret';
-
 const store = new MongoDBStore({
     url: dbUrl,
     secret,
     touchAfter: 24 * 60 * 60
 });
-
 store.on("error", function(e) {
     console.log("SESSION STORE ERROR", e);
 })
 
-// MIDDLEWARE: Session & Flash configuration
+// MIDDLEWARE: Session & flash configuration
 const sessionConfig = {
     store,
     name: 'session',
@@ -91,6 +89,8 @@ const sessionConfig = {
 }
 app.use(session(sessionConfig));
 app.use(flash());
+
+// MIDDLEWARE: HTTP header setters
 app.use(helmet());
 
 // Restrict locations where resources can be fetched from
@@ -147,9 +147,9 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-// MIDDLEWARE: On every request, define local variables (ejs)
+// MIDDLEWARE: On every request, define local ejs variables
 app.use((req, res, next) => {
-    res.locals.currentUser = req.user; // info about the current user (User object if logged in, otherwise undefined), handled by Passport
+    res.locals.currentUser = req.user; // info about the current user (User object or undefined), handled by Passport
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error');
     next();
@@ -160,7 +160,7 @@ app.use('/', userRoutes);
 app.use('/campgrounds', campgroundRoutes);
 app.use(`/campgrounds/:id/reviews`, reviewRoutes);
 
-// Respond to a GET request for the home page
+// Render home page
 app.get('/', (req, res) => {
     res.render('home');
 })
@@ -170,23 +170,17 @@ app.all('*', (req, res, next) => {
     next(new ExpressError('Page Not Found', 404));
 })
 
-// Default error handler, receives an error, if any, from a previous function
+// Default error handler (receives an error, if any, from a previous function)
 app.use((err, req, res, next) => {
     // Deconstruct statusCode from previous function, with default set to 500
     const { statusCode = 500 } = err;
     // Set a default error message if none provided
     if (!err.message) err.message = 'Oh no, something went wrong!';
-    // Send status code and render error.ejs page
+    // Send status code and render error page
     res.status(statusCode).render('error', { err });
 })
 
-// // Test the app's connection to the database (entry should be visible on MongoDB)
-// app.get('/makecampground', async (req, res) => {
-//     const camp = new Campground({ title: 'My Backyard', description: 'cheap camping' });
-//     await camp.save()
-//     res.send(camp)
-// })
-
+// Initialize port to serve
 const port = process.env.PORT || 3000;
 
 // Listen for connections on the specified port

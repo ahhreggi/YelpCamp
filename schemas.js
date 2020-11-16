@@ -1,11 +1,13 @@
+// Require modules
 const BaseJoi = require('joi');
 const sanitizeHtml = require('sanitize-html');
 
+// Prohibit HTML elements from strings
 const extension = (joi) => ({
     type: 'string',
     base: joi.string(),
     messages: {
-        'string.escapeHTML': '{{#label}} must not include HTML!'
+        'string.escapeHTML': '{{#label}} must not include HTML.'
     },
     rules: {
         escapeHTML: {
@@ -20,7 +22,6 @@ const extension = (joi) => ({
         }
     }
 });
-
 const Joi = BaseJoi.extend(extension)
 
 // Schema for validating new campground submissions
@@ -28,7 +29,6 @@ module.exports.campgroundSchema = Joi.object({
     campground: Joi.object({
         title: Joi.string().required().escapeHTML(),
         price: Joi.number().required().min(0),
-        // image: Joi.string().required(),
         location: Joi.string().required().escapeHTML(),
         description: Joi.string().required().escapeHTML()
     }).required(),

@@ -1,5 +1,4 @@
 // Throw whenever there is an Express error
-
 class ExpressError extends Error {
     constructor(message, statusCode) {
         super();
@@ -8,4 +7,5 @@ class ExpressError extends Error {
     }
 }
 
+// Export the error class
 module.exports = ExpressError;

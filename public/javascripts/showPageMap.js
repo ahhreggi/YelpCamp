@@ -1,4 +1,7 @@
+// Retrieve access token from index page
 mapboxgl.accessToken = mapToken;
+
+// Create a generic map
 const map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/light-v10', // stylesheet location
@@ -6,9 +9,10 @@ const map = new mapboxgl.Map({
     zoom: 10 // starting zoom
 });
 
-// Add zoom and rotation controls to the map.
+// Add map zoom and rotation controls
 map.addControl(new mapboxgl.NavigationControl());
 
+// Add marker to campground location on map
 new mapboxgl.Marker()
     .setLngLat(campground.geometry.coordinates)
     .setPopup(

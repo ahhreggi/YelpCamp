@@ -7,17 +7,11 @@ const Campground = require('../models/campground');
 const Review = require('../models/review');
 const reviews = require('../controllers/reviews');
 
-// EDIT route - UPDATE existing data within the database
-// (e.g., a page with a form that submits new data)
-// Require that the user is logged in
-// Execute while validating data and catching any errors, and if so, pass to next() (the basic error handler)
+// CREATE route - Add new review to campground
 router.post('/', isLoggedIn, validateReview, catchAsync(reviews.createReview));
 
-// DELETE route - DESTROY existing data within the database
-// (e.g., a button on a campground's review to delete it)
-// Require that the user is logged in
-// Check that the user is the author
-// Execute while validating data and catching any errors, and if so, pass to next() (the basic error handler)
+// DELETE route - Delete a specific review from a campground
 router.delete('/:reviewId', isLoggedIn, isReviewAuthor, catchAsync(reviews.deleteReview));
 
+// Export routers
 module.exports = router;
