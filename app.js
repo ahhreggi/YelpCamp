@@ -187,7 +187,9 @@ app.use((err, req, res, next) => {
 //     res.send(camp)
 // })
 
+const port = process.env.PORT || 3000;
+
 // Listen for connections on the specified port
-app.listen(3000, () => {
-    console.log('(YelpCamp) Listening to port 3000...');
+app.listen(port, () => {
+    console.log(`(YelpCamp) Listening to port ${port}...`);
 })
