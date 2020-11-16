@@ -10,7 +10,7 @@
 
 <!-- DESCRIPTION -->
 <p align="center">
-  A full-stack application for publishing crowd-sourced reviews about campgrounds (work-in-progress!)
+  A full-stack application for publishing crowd-sourced reviews about campgrounds
 </p>
 
 <!-- TECH USAGES -->
@@ -25,7 +25,7 @@
 
 <!-- DEMO LINK -->
 <div align="center">
-  <b><a href="https://yelp-camp-ahhreggi.herokuapp.com/">
+  <b><a href="https://yelp-camp-ahhreggi.herokuapp.com/" target="_blank">
     View Live Demo »
   </a></b>
 </div>
@@ -43,14 +43,16 @@ This project was created as part of the <a href="https://www.udemy.com/course/th
 
 <b>My goal was to learn how to create applications that could be used by anyone.</b>
 
-In building YelpCamp, these individual technologies were combined into a single, deployable application. I also learned how to design RESTful routes, utilize a variety of helpful modules, and implement basic security procedures. I was surprised by how easily a lot of things could be simplified as long as you had the right tools or knew where to look. This project is far from perfect and I have so much more to learn, but it's a start and it has certainly given me the essentials to start building more applications in the future. ✌️
+In building YelpCamp, the individual technologies I learned were combined into a single, deployable application. I also learned how to design RESTful routes, utilize a variety of helpful modules, and implement basic security. I was surprised by how easily a lot of things could be simplified as long as you had the right tools or knew where to look. This project is far from perfect and I have so much more to learn, but it's a start and it has certainly given me the essentials to start building more applications in the future. ✌️
 
+<b>
 Built with <a href="https://nodejs.org/en/">Node.js</a>,
 <a href="https://expressjs.com/">Express</a>,
 <a href="https://www.mongodb.com/">MongoDB</a>,
 <a href="https://v5.getbootstrap.com/">Bootstrap 5</a>,
 <a href="http://www.passportjs.org/">Passport.js</a> and hosted with
 <a href="https://www.heroku.com/">Heroku</a>
+</b>
 
 <!-- FEATURES -->
 ## ⭐ Features
