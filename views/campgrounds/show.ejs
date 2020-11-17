@@ -49,8 +49,9 @@
                 </form>
             </div>
             <% } %>
+            <!-- Time since posted or last updated -->
             <div class="card-footer text-muted">
-                2 days ago
+                <%= `${campground.updated ? 'Last updated' : 'Posted'} ${dayjs(campground.date).fromNow()}` %>
             </div>
         </div>
     </div>

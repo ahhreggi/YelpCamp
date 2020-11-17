@@ -4,6 +4,9 @@ const mbxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding');
 const mapBoxToken = process.env.MAPBOX_TOKEN;
 const geocoder = mbxGeocoding({ accessToken: mapBoxToken });
 const { cloudinary } = require('../cloudinary');
+const dayjs = require('dayjs');
+const relativeTime = require('dayjs/plugin/relativeTime');
+dayjs.extend(relativeTime);
 
 // Render index page
 module.exports.index = async (req, res) => {
@@ -29,6 +32,9 @@ module.exports.createCampground = async (req, res, next) => {
     campground.images = req.files.map(f => ({
         url: f.path, filename: f.filename
     }));
+    campground.updated = false;
+    // Save current date and time
+    campground.date = dayjs().format('YYYY-MM-DD:HH:mm:ss')
     // Save the campground author as the currently logged in user
     campground.author = req.user._id;
     // Save changes and flash success message
@@ -53,7 +59,7 @@ module.exports.showCampground = async (req, res) => {
         req.flash('error', 'Cannot find that campground!');
         return res.redirect('/campgrounds');
     }
-    res.render('campgrounds/show', { campground } );
+    res.render('campgrounds/show', { campground, dayjs } );
 };
 
 // Render edit campground form
@@ -78,6 +84,9 @@ module.exports.updateCampground = async (req, res) => {
     // Add new images to existing images array
     const imgs = req.files.map(f => ({ url: f.path, filename: f.filename }));
     campground.images.push(...imgs);
+    // Mark campground as updated and save date and time
+    campground.updated = true;
+    campground.date = dayjs().format('YYYY-MM-DD:HH:mm:ss');
     await campground.save();
     // If there are images to delete, pull from the images array
     // all filenames that are in the deleteImages array
