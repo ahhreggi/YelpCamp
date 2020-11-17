@@ -99,6 +99,7 @@
         <div class="card mb-3">
             <div class="card-body">
                 <h5 class="card-title"><%= review.author.username %></h5>
+                <h6 class="text-muted"><%= `${dayjs(review.date).fromNow()}` %></h6>
                 <p class="starability-result" data-rating="<%= review.rating %>">
                     Rated: <%= review.rating %> stars
                 </p>
@@ -111,6 +112,9 @@
                     <button class="btn btn-sm btn-danger">Delete</button>
                 </form>
                 <% } %>
+            </div>
+            <div class="card-footer text-muted">
+                <%= `${dayjs(review.date).fromNow()}` %>
             </div>
         </div>
         <% } %>

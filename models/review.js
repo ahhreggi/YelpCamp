@@ -6,11 +6,12 @@ const Schema = mongoose.Schema;
 const reviewSchema = new Schema({
     body: String,
     rating: Number,
+    date: String,
     author: {
         type: Schema.Types.ObjectId,
         ref: 'User'
     }
-})
+});
 
 // Compile and export the model
 module.exports = mongoose.model('Review', reviewSchema);

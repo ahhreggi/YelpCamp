@@ -1,5 +1,8 @@
 const Campground = require('../models/campground');
 const Review = require('../models/review');
+const dayjs = require('dayjs');
+const relativeTime = require('dayjs/plugin/relativeTime');
+dayjs.extend(relativeTime);
 
 // Create a new review using submitted data
 module.exports.createReview = async (req, res) => {
@@ -8,6 +11,8 @@ module.exports.createReview = async (req, res) => {
     // Initialize and push new review properties
     const review = new Review(req.body.review);
     review.author = req.user._id;
+    // Save current date and time
+    review.date = dayjs().format('YYYY-MM-DD:HH:mm:ss')
     campground.reviews.push(review);
     await review.save();
     await campground.save();
