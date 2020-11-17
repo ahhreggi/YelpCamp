@@ -132,6 +132,7 @@ app.use(
                 "data:",
                 "https://res.cloudinary.com/ahhreggi/", //SHOULD MATCH YOUR CLOUDINARY ACCOUNT! 
                 "https://images.unsplash.com/",
+                "https://i.imgur.com/"
             ],
             fontSrc: ["'self'", ...fontSrcUrls],
         },

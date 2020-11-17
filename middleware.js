@@ -24,7 +24,8 @@ module.exports.validateCampground = (req, res, next) => {
     // then throw an ExpressError with the message and error code 400
     if (error) {
         const msg = error.details.map(el => el.message).join(',');
-        throw new ExpressError(msg, 400);
+        req.flash('error', msg);
+        return res.redirect('/campgrounds/new');
     } else {
         next();
     }
@@ -72,12 +73,10 @@ module.exports.isReviewAuthor = async (req, res, next) => {
 module.exports.validateReview = (req, res, next) => {
     // Validate submitted review data
     const { error } = reviewSchema.validate(req.body);
-    // If there is an error, grab the details (array of objects),
-    // map them into an array of its messages, join the messages,
-    // then throw an ExpressError with the message and error code 400
+    // If there is an error with the user's review, flash error and redirect
     if (error) {
-        const msg = error.details.map(el => el.message).join(',');
-        throw new ExpressError(msg, 400);
+        req.flash('error', 'Please select a rating.');
+        return res.redirect(`/campgrounds/${req.params.id}`);
     } else {
         next();
     }

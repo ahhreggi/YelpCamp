@@ -3,9 +3,10 @@
 
 <div class="row">
     <div class="col-6">
+        <% if (campground.images.length > 0) { %>
         <!-- Image carousel -->
         <div id="campgroundCarousel" class="carousel slide" data-ride="carousel">
-            <div class="carousel-inner">
+            <div class="carousel-inner" style="width: 100%; height: 400px">
                 <% campground.images.forEach((img, i) => { %>
                 <div class="carousel-item <%= i === 0 ? 'active' : ''%>">
                     <img src="<%= img.url %>" class="d-block w-100" alt="">
@@ -24,6 +25,10 @@
             </a>
             <% } %>
         </div>
+        <% } else { %>
+        <!-- No preview available photo placeholder -->
+        <img src="https://i.imgur.com/RoEnZXt.jpg" class="d-block w-100">
+        <% } %>
         <div class="card mb-3">
             <div class="card-body">
                 <h5 class="card-title"><%= campground.title %></h5>
@@ -56,7 +61,8 @@
         <!-- Show review form if the user is logged in and is not the campground author  -->
         <% if (currentUser) { %>
         <!-- novalidate nullifies "required" property to allow Bootstrap to handle .validated-form elements -->
-        <form id="rating" action="/campgrounds/<%= campground._id %>/reviews" method="post" class="mb-3 validated-form" novalidate>
+        <form id="rating" action="/campgrounds/<%= campground._id %>/reviews" method="post" class="mb-3 validated-form"
+            novalidate>
             <div class="mb-3">
                 <fieldset class="starability-basic">
                     <h6>Select a rating:</h6>
@@ -75,7 +81,9 @@
                 </fieldset>
             </div>
             <div class="mb-3">
-                <label class="form-label" for="body"><h6>Write a review:</h6></label>
+                <label class="form-label" for="body">
+                    <h6>Write a review:</h6>
+                </label>
                 <textarea name="review[body]" id="body" cols="30" rows="3" class="form-control" required></textarea>
                 <div class="valid-feedback">
                     Looks good!

@@ -10,7 +10,6 @@ module.exports.renderRegister = (req, res) => {
 module.exports.register = async (req, res) => {
     try {
         const { email, username, password } = req.body;
-        console.log(req.body);
         // Initialize new user properties
         const user = new User({ email, username });
         // Password + salt hashing managed by Passport.js
