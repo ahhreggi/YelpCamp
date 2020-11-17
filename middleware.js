@@ -37,7 +37,19 @@ module.exports.isAuthor = async (req, res, next) => {
     // If the user does not own the campground, flash error and redirect
     if (!campground.author.equals(req.user._id)) {
         req.flash('error', 'You do not have permission to do that!');
-        return res.redirect(`/campgrounds/${id}`);
+        return res.redirect(`/campgrounds/${req.params.id}`);
+    }
+    next();
+}
+
+// Verify that the user is not the campground author
+module.exports.isNotAuthor = async (req, res, next) => {
+    // Retrieve data for the specified campground
+    const campground = await Campground.findById(req.params.id);
+    // If the user owns the campground, flash error and redirect
+    if (campground.author.equals(req.user._id)) {
+        req.flash('error', `You can't review your own campground!`);
+        return res.redirect(`/campgrounds/${req.params.id}`);
     }
     next();
 }

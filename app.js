@@ -152,6 +152,7 @@ app.use((req, res, next) => {
     res.locals.currentUser = req.user; // info about the current user (User object or undefined), handled by Passport
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error');
+    res.locals.currentPage = req.originalUrl;
     next();
 })
 

@@ -7,9 +7,9 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
-                <a class="nav-link active" href="/">Home</a>
-                <a class="nav-link" href="/campgrounds">Campgrounds</a>
-                <a class="nav-link" href="/campgrounds/new">New Campground</a>
+                <a class="nav-link <%= currentPage === '/' ? 'active' : '' %>" href="/">Home</a>
+                <a class="nav-link <%= currentPage === '/campgrounds' ? 'active' : '' %>" href="/campgrounds">Campgrounds</a>
+                <a class="nav-link <%= currentPage === '/campgrounds/new' ? 'active' : '' %>" href="/campgrounds/new">New Campground</a>
             </div>
             <!-- Add authentication links to right end of navbar -->
             <div class="navbar-nav ml-auto">
