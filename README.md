@@ -26,7 +26,7 @@
 <!-- DEMO LINK -->
 <div align="center">
   <b><a href="https://yelp-camp-ahhreggi.herokuapp.com/" target="_blank">
-    View Live Demo »
+    » View Live Demo «
   </a></b>
 </div>
 
